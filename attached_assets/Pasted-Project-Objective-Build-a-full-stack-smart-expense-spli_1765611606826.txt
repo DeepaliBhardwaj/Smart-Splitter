@@ -1,0 +1,335 @@
+Project Objective
+
+Build a full-stack smart expense splitting platform that allows groups to track shared expenses, automatically split bills, simplify debts, analyze spending patterns, and settle balances — all in real time.
+The app should be more powerful and intelligent than Splitwise.
+
+🛠 Mandatory Tech Stack (Do NOT change)
+Frontend
+
+React.js (Vite)
+
+Tailwind CSS
+
+Zustand (state management)
+
+React Router DOM
+
+Axios
+
+Shadcn/UI components
+
+Recharts (charts & analytics)
+
+Backend
+
+Node.js
+
+Express.js
+
+MongoDB + Mongoose
+
+JWT Authentication
+
+bcryptjs
+
+WebSockets (Socket.IO)
+
+OCR API (for bill scanning)
+
+OpenAI API (AI insights)
+
+CORS
+
+dotenv
+
+🔐 Authentication & Authorization
+
+User Register / Login / Logout
+
+JWT-based protected routes
+
+Password hashing
+
+User profile management
+
+📌 Core Features (Must Implement)
+👥 1. Groups & Members
+
+Create expense groups (Trip, Flatmates, Friends, Office)
+
+Add / remove members
+
+Group roles (Admin / Member)
+
+💰 2. Smart Expense Management
+
+User can add:
+
+Expense title
+
+Total amount
+
+Paid by (single or multiple users)
+
+Split type:
+
+Equal split
+
+Percentage split
+
+Exact amount split
+
+Category (Food, Travel, Rent, Shopping)
+
+Notes & date
+
+App automatically calculates:
+
+Who owes whom
+
+Exact balance per user
+
+📸 3. Bill Scan (OCR)
+
+Upload bill image
+
+OCR extracts:
+
+Amount
+
+Items
+
+Auto-create expense from bill
+
+🔁 4. Debt Simplification Algorithm
+
+Implement algorithm to:
+
+Minimize number of transactions
+
+Settle balances efficiently
+
+Example:
+
+A owes B ₹500, B owes C ₹500 →
+A directly pays C ₹500
+
+💬 5. Group Chat (Real-Time)
+
+Real-time group chat using WebSockets
+
+Expense-linked messages
+
+Typing indicator
+
+📊 6. Expense Analytics Dashboard
+
+Show:
+
+Monthly spending
+
+Category-wise breakdown
+
+Who spends most
+
+Who owes most
+
+Visual charts & summaries
+
+🧠 7. AI Spending Insights
+
+Using OpenAI:
+
+Monthly spending summary
+
+Suggestions to reduce expenses
+
+Detect overspending patterns
+
+(Return mock response if API key missing)
+
+🗂 8. Expense History & Activity Log
+
+Track:
+
+Added expense
+
+Settlements
+
+Member actions
+
+Who paid / who settled
+
+💸 9. Settlements
+
+Mark expense as paid
+
+Partial payments
+
+Settlement history
+
+Balance reset after settlement
+
+🎨 UI / UX Requirements
+
+Clean modern finance-style UI
+
+Mobile-first responsive design
+
+Dark / Light mode
+
+Smooth animations
+
+Clear balance indicators (green/red)
+
+📁 Required Folder Structure
+/client
+ ├─ src
+ │   ├─ components
+ │   │   ├─ Auth
+ │   │   ├─ Groups
+ │   │   ├─ Expenses
+ │   │   ├─ Chat
+ │   │   ├─ Analytics
+ │   │   ├─ UI
+ │   ├─ pages
+ │   │   ├─ Login.jsx
+ │   │   ├─ Register.jsx
+ │   │   ├─ Dashboard.jsx
+ │   │   ├─ Group.jsx
+ │   │   ├─ Analytics.jsx
+ │   ├─ store
+ │   │   ├─ authStore.js
+ │   │   ├─ expenseStore.js
+ │   ├─ utils
+ │   │   ├─ api.js
+ │   │   ├─ helpers.js
+ │   ├─ App.jsx
+ │   ├─ main.jsx
+ │   ├─ router.jsx
+ └─ index.html
+
+/server
+ ├─ controllers
+ ├─ models
+ ├─ routes
+ ├─ middleware
+ ├─ sockets
+ ├─ utils
+ ├─ server.js
+ └─ .env.example
+
+🧾 Database Models
+User
+
+name
+
+email
+
+password
+
+avatar
+
+createdAt
+
+Group
+
+name
+
+createdBy
+
+members (userId, role)
+
+Expense
+
+groupId
+
+title
+
+totalAmount
+
+paidBy
+
+splitType
+
+splitDetails
+
+category
+
+date
+
+createdBy
+
+Settlement
+
+groupId
+
+fromUser
+
+toUser
+
+amount
+
+date
+
+🔌 API Endpoints
+Auth
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+
+Groups
+POST /api/groups
+GET  /api/groups
+GET  /api/groups/:id
+
+Expenses
+POST /api/expenses
+GET  /api/expenses/:groupId
+PUT  /api/expenses/:id
+DELETE /api/expenses/:id
+
+Settlements
+POST /api/settlements
+GET  /api/settlements/:groupId
+
+AI Insights
+GET /api/ai/insights/:groupId
+
+🔁 WebSocket Events
+expense-added
+expense-updated
+expense-deleted
+settlement-done
+message-sent
+user-typing
+
+📘 README Must Include
+
+Project overview
+
+Features
+
+Tech stack
+
+Setup steps
+
+Sample .env
+
+Screenshots
+
+Future enhancements
+
+🚀 Final Output Expectations
+
+Fully functional frontend + backend
+
+Accurate calculations
+
+Clean UI
+
+Real-time updates
+
+AI integration (or mock)
+
+Portfolio-ready project
