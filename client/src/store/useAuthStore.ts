@@ -1,45 +1,65 @@
 import { create } from 'zustand';
+import axios from 'axios';
 
 interface User {
-  id: string;
+  id: string; // Mongoose _id is string
+  username: string;
   name: string;
   email: string;
   avatar?: string;
+  _id?: string; // Handle both id and _id if needed, but we can normalize
 }
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
+  isLoading: boolean;
+  login: (username: string, password: string) => Promise<void>; // Changed email to username as per backend
+  register: (username: string, password: string, name: string, email: string) => Promise<void>;
+  logout: () => Promise<void>;
+  checkAuth: () => Promise<void>;
 }
 
-// Mock User
-const MOCK_USER: User = {
-  id: 'u1',
-  name: 'Alex Johnson',
-  email: 'alex@example.com',
-  avatar: 'https://github.com/shadcn.png',
-};
-
 export const useAuthStore = create<AuthState>((set) => ({
-  user: MOCK_USER, // Default logged in for mockup
-  isAuthenticated: true,
-  login: async (email, password) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    set({ 
-      user: { ...MOCK_USER, email }, 
-      isAuthenticated: true 
-    });
+  user: null,
+  isAuthenticated: false,
+  isLoading: true, // Initial loading state for checking auth
+  login: async (username, password) => {
+    try {
+      const res = await axios.post('/api/auth/login', { username, password });
+      // Map _id to id for frontend consistency if needed, or just use _id
+      const user = { ...res.data, id: res.data._id };
+      set({ user, isAuthenticated: true });
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
   },
-  register: async (name, email, password) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    set({ 
-      user: { id: `u${Math.random()}`, name, email, avatar: '' }, 
-      isAuthenticated: true 
-    });
+  register: async (username, password, name, email) => {
+    try {
+      const res = await axios.post('/api/auth/register', { username, password, name, email });
+      const user = { ...res.data, id: res.data._id };
+      set({ user, isAuthenticated: true });
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
+    }
   },
-  logout: () => set({ user: null, isAuthenticated: false }),
+  logout: async () => {
+    try {
+      await axios.post('/api/auth/logout');
+      set({ user: null, isAuthenticated: false });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  },
+  checkAuth: async () => {
+    try {
+      const res = await axios.get('/api/auth/me');
+      const user = { ...res.data, id: res.data._id };
+      set({ user, isAuthenticated: true, isLoading: false });
+    } catch (error) {
+      set({ user: null, isAuthenticated: false, isLoading: false });
+    }
+  }
 }));

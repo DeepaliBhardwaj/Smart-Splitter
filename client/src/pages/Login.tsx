@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Receipt } from "lucide-react";
 
 const formSchema = z.object({
-  email: z.string().email(),
+  username: z.string().min(3),
   password: z.string().min(6),
 });
 
@@ -26,24 +26,24 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await login(values.email, values.password);
+    await login(values.username, values.password);
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-           <div className="flex justify-center mb-4">
-             <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
-                <Receipt className="h-6 w-6" />
-             </div>
-           </div>
+          <div className="flex justify-center mb-4">
+            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
+              <Receipt className="h-6 w-6" />
+            </div>
+          </div>
           <CardTitle className="text-2xl font-bold text-primary">Welcome back</CardTitle>
           <CardDescription>
             Login to your SplitSmart account
@@ -54,12 +54,12 @@ export default function Login() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="m@example.com" {...field} />
+                      <Input placeholder="username" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,9 +85,9 @@ export default function Login() {
           </Form>
         </CardContent>
         <CardFooter className="justify-center">
-            <p className="text-sm text-muted-foreground">
-                Don't have an account? <Link to="/register" className="text-primary hover:underline">Sign up</Link>
-            </p>
+          <p className="text-sm text-muted-foreground">
+            Don't have an account? <Link to="/register" className="text-primary hover:underline">Sign up</Link>
+          </p>
         </CardFooter>
       </Card>
     </div>

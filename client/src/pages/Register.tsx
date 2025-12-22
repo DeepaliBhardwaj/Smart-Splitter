@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Receipt } from "lucide-react";
 
 const formSchema = z.object({
+  username: z.string().min(3),
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
@@ -27,6 +28,7 @@ export default function Register() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       name: "",
       email: "",
       password: "",
@@ -34,18 +36,18 @@ export default function Register() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await register(values.name, values.email, values.password);
+    await register(values.username, values.password, values.name, values.email);
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-           <div className="flex justify-center mb-4">
-             <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
-                <Receipt className="h-6 w-6" />
-             </div>
-           </div>
+          <div className="flex justify-center mb-4">
+            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
+              <Receipt className="h-6 w-6" />
+            </div>
+          </div>
           <CardTitle className="text-2xl font-bold text-primary">Create an account</CardTitle>
           <CardDescription>
             Join SplitSmart to track expenses
@@ -54,7 +56,20 @@ export default function Register() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-               <FormField
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -100,9 +115,9 @@ export default function Register() {
           </Form>
         </CardContent>
         <CardFooter className="justify-center">
-            <p className="text-sm text-muted-foreground">
-                Already have an account? <Link to="/login" className="text-primary hover:underline">Login</Link>
-            </p>
+          <p className="text-sm text-muted-foreground">
+            Already have an account? <Link to="/login" className="text-primary hover:underline">Login</Link>
+          </p>
         </CardFooter>
       </Card>
     </div>
