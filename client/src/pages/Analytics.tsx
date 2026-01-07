@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { useExpenseStore } from "@/store/useExpenseStore";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -27,7 +28,8 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <AppLayout>
+      <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
       </div>
@@ -111,5 +113,6 @@ export default function Analytics() {
         </CardContent>
       </Card>
     </div>
+    </AppLayout>
   );
 }

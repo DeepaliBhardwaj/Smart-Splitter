@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -13,12 +13,23 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 function Sidebar({ className }: SidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { logout } = useAuthStore();
+  
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully", {
+      description: "See you next time!",
+      duration: 3000,
+    });
+    navigate('/login');
+  };
   
   const links = [
     { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -53,7 +64,7 @@ function Sidebar({ className }: SidebarProps) {
         </div>
       </div>
       <div className="px-3 py-2 mt-auto absolute bottom-4 w-full border-t pt-4">
-         <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => logout()}>
+         <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </Button>
@@ -62,7 +73,7 @@ function Sidebar({ className }: SidebarProps) {
   );
 }
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export function AppLayout({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
 

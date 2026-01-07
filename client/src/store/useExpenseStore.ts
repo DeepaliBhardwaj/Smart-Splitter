@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import axios from 'axios';
 
 export interface User {
   id: string;
@@ -10,7 +9,6 @@ export interface User {
 
 export interface Expense {
   id: string;
-  _id?: string;
   groupId: string;
   title: string;
   amount: number;
@@ -23,11 +21,11 @@ export interface Expense {
 
 export interface Group {
   id: string;
-  _id?: string;
   name: string;
   type: 'Trip' | 'Home' | 'Couple' | 'Other';
   members: User[];
   currency: string;
+  createdBy: string;
 }
 
 interface ExpenseState {
@@ -36,81 +34,138 @@ interface ExpenseState {
   activeGroupId: string | null;
   isLoading: boolean;
   setActiveGroup: (id: string | null) => void;
-  fetchGroups: () => Promise<void>;
-  fetchExpenses: () => Promise<void>;
-  createGroup: (group: Omit<Group, 'id' | '_id' | 'members'> & { members: string[] }) => Promise<void>;
-  addExpense: (expense: Omit<Expense, 'id' | '_id' | 'date'>) => Promise<void>;
-  settleUp: (groupId: string, fromUser: string, toUser: string, amount: number) => Promise<void>;
+  fetchGroups: () => void;
+  fetchExpenses: () => void;
+  createGroup: (group: Omit<Group, 'id' | 'createdBy'>) => void;
+  updateGroup: (id: string, group: Partial<Group>) => void;
+  deleteGroup: (id: string) => void;
+  addExpense: (expense: Omit<Expense, 'id' | 'date'>) => void;
+  updateExpense: (id: string, expense: Partial<Expense>) => void;
+  deleteExpense: (id: string) => void;
+  settleUp: (groupId: string, fromUser: string, toUser: string, amount: number) => void;
 }
+
+// Initialize localStorage with sample data if empty
+const initializeData = () => {
+  const currentUser = localStorage.getItem('currentUser');
+  if (!currentUser) return;
+  
+  const user = JSON.parse(currentUser);
+  
+  if (!localStorage.getItem('groups')) {
+    const sampleGroups: Group[] = [
+      {
+        id: '1',
+        name: 'Weekend Trip',
+        type: 'Trip',
+        currency: '$',
+        createdBy: user.id,
+        members: [user],
+      },
+    ];
+    localStorage.setItem('groups', JSON.stringify(sampleGroups));
+  }
+  
+  if (!localStorage.getItem('expenses')) {
+    localStorage.setItem('expenses', JSON.stringify([]));
+  }
+};
 
 export const useExpenseStore = create<ExpenseState>((set, get) => ({
   groups: [],
   expenses: [],
   activeGroupId: null,
   isLoading: false,
+  
   setActiveGroup: (id) => set({ activeGroupId: id }),
-  fetchGroups: async () => {
-    set({ isLoading: true });
-    try {
-      const res = await axios.get('/api/groups');
-      const groups = res.data.map((g: any) => ({ ...g, id: g._id }));
-      set({ groups, isLoading: false });
-    } catch (error) {
-      console.error('Error fetching groups:', error);
-      set({ isLoading: false });
-    }
+  
+  fetchGroups: () => {
+    initializeData();
+    const groupsJson = localStorage.getItem('groups');
+    const groups = groupsJson ? JSON.parse(groupsJson) : [];
+    set({ groups });
   },
-  fetchExpenses: async () => {
-    set({ isLoading: true });
-    try {
-      const res = await axios.get('/api/expenses');
-      const expenses = res.data.map((e: any) => ({ ...e, id: e._id }));
-      set({ expenses, isLoading: false });
-    } catch (error) {
-      console.error('Error fetching expenses:', error);
-      set({ isLoading: false });
-    }
+  
+  fetchExpenses: () => {
+    initializeData();
+    const expensesJson = localStorage.getItem('expenses');
+    const expenses = expensesJson ? JSON.parse(expensesJson) : [];
+    set({ expenses });
   },
-  createGroup: async (groupData) => {
-    set({ isLoading: true });
-    try {
-      const res = await axios.post('/api/groups', groupData);
-      const newGroup = { ...res.data, id: res.data._id };
-      set((state) => ({ groups: [...state.groups, newGroup], isLoading: false }));
-    } catch (error) {
-      console.error('Error creating group:', error);
-      set({ isLoading: false });
-      throw error;
-    }
+  
+  createGroup: (groupData) => {
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) return;
+    
+    const user = JSON.parse(currentUser);
+    const newGroup: Group = {
+      ...groupData,
+      id: Date.now().toString(),
+      createdBy: user.id,
+    };
+    
+    const groups = [...get().groups, newGroup];
+    localStorage.setItem('groups', JSON.stringify(groups));
+    set({ groups });
   },
-  addExpense: async (expenseData) => {
-    set({ isLoading: true });
-    try {
-      const res = await axios.post('/api/expenses', expenseData);
-      const newExpense = { ...res.data, id: res.data._id };
-      set((state) => ({ expenses: [...state.expenses, newExpense], isLoading: false }));
-    } catch (error) {
-      console.error('Error adding expense:', error);
-      set({ isLoading: false });
-      throw error;
-    }
+  
+  updateGroup: (id, groupData) => {
+    const groups = get().groups.map(g => 
+      g.id === id ? { ...g, ...groupData } : g
+    );
+    localStorage.setItem('groups', JSON.stringify(groups));
+    set({ groups });
   },
-  settleUp: async (groupId, fromUser, toUser, amount) => {
-    // Implement settlement logic (create expense or specific endpoint)
-    // For now, creating a settlement expense
-    try {
-      await get().addExpense({
-        groupId,
-        title: 'Settlement',
-        amount,
-        paidBy: fromUser,
-        splitType: 'EXACT',
-        category: 'Other',
-        participants: [toUser]
-      });
-    } catch (error) {
-      console.error('Error settling up:', error);
-      throw error;
-    }
+  
+  deleteGroup: (id) => {
+    const groups = get().groups.filter(g => g.id !== id);
+    const expenses = get().expenses.filter(e => e.groupId !== id);
+    localStorage.setItem('groups', JSON.stringify(groups));
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    set({ groups, expenses });
+  },
+  
+  addExpense: (expenseData) => {
+    const newExpense: Expense = {
+      ...expenseData,
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+    };
+    
+    const expenses = [...get().expenses, newExpense];
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    set({ expenses });
+  },
+  
+  updateExpense: (id, expenseData) => {
+    const expenses = get().expenses.map(e => 
+      e.id === id ? { ...e, ...expenseData } : e
+    );
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    set({ expenses });
+  },
+  
+  deleteExpense: (id) => {
+    const expenses = get().expenses.filter(e => e.id !== id);
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    set({ expenses });
+  },
+  
+  settleUp: (groupId, fromUser, toUser, amount) => {
+    const newExpense: Expense = {
+      id: Date.now().toString(),
+      groupId,
+      title: 'Settlement',
+      amount,
+      paidBy: toUser,
+      splitType: 'EXACT',
+      category: 'Other',
+      date: new Date().toISOString(),
+      participants: [fromUser],
+    };
+    
+    const expenses = [...get().expenses, newExpense];
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    set({ expenses });
   },
 }));
