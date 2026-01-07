@@ -1,0 +1,7 @@
+node_modules
+.git
+.vite
+.cursor
+docs
+attached_assets
+
