@@ -1,6 +1,23 @@
 # 🚀 Quick Start Guide
 
-## Get Up and Running in 1 Minute!
+## 🌐 Option 1: Try Live Demo (Instant!)
+
+**No installation needed!** Just visit:
+
+### [https://smart-splitter.vercel.app/login](https://smart-splitter.vercel.app/login)
+
+- ✅ Works instantly in browser
+- ✅ No setup required
+- ✅ Any device (mobile, tablet, desktop)
+- ✅ Share the link with anyone
+
+**Login:** Use any username/password - they all work!
+
+---
+
+## 💻 Option 2: Run Locally
+
+Get Up and Running in 1 Minute!
 
 ### Step 1: Install & Run
 

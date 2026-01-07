@@ -2,11 +2,16 @@
 
 A beautiful, modern expense splitting application built with React, TypeScript, and localStorage. Split bills, track expenses, and manage group finances with ease - **all in your browser!**
 
+## 🌐 [**Live Demo →**](https://smart-splitter.vercel.app/login)
+
+**Try it now:** [https://smart-splitter.vercel.app/login](https://smart-splitter.vercel.app/login)
+
 ![Demo Mode](https://img.shields.io/badge/Mode-Demo-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)
 ![Frontend Only](https://img.shields.io/badge/Frontend-Only-orange)
+![Live](https://img.shields.io/badge/Live-Vercel-black)
 
 ## ✨ Features
 
@@ -41,12 +46,25 @@ A beautiful, modern expense splitting application built with React, TypeScript, 
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🌟 Try Live Demo (No Installation Needed!)
 
+**Visit:** [https://smart-splitter.vercel.app/login](https://smart-splitter.vercel.app/login)
+
+Just open the link and login with **any credentials** - it works instantly! Perfect for:
+- ✅ Testing the app without setup
+- ✅ Sharing with others
+- ✅ Mobile testing
+- ✅ Portfolio demonstrations
+
+### 💻 Run Locally
+
+If you want to run it on your machine:
+
+#### Prerequisites
 - Node.js 18+
 - npm or yarn
 
-### Installation & Run
+#### Installation & Run
 
 ```bash
 # Clone the repository
@@ -62,7 +80,7 @@ npm run dev
 
 Visit `http://localhost:5173` and start splitting expenses!
 
-### Demo Login
+### 🔑 Demo Login
 
 Enter **any username and password** to login. The app is in demo mode - perfect for showcasing!
 
