@@ -91,7 +91,7 @@ export default function Dashboard() {
               <ArrowDownLeft className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">${totalOwed.toFixed(2)}</div>
+              <div className="text-3xl font-bold text-green-600">₹{totalOwed.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Money others owe you
               </p>
@@ -104,7 +104,7 @@ export default function Dashboard() {
               <ArrowUpRight className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-red-600">${totalOwe.toFixed(2)}</div>
+              <div className="text-3xl font-bold text-red-600">₹{totalOwe.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Money you owe others
               </p>
@@ -118,7 +118,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className={`text-3xl font-bold ${totalBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${Math.abs(totalBalance).toFixed(2)}
+                ₹{Math.abs(totalBalance).toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 {totalBalance >= 0 ? 'You\'re owed' : 'You owe'}
@@ -132,7 +132,7 @@ export default function Dashboard() {
               <TrendingUp className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-purple-600">${totalSpending.toFixed(2)}</div>
+              <div className="text-3xl font-bold text-purple-600">₹{totalSpending.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Across {expenses.length} expenses
               </p>
@@ -163,7 +163,7 @@ export default function Dashboard() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(value) => `$${value}`}
+                      tickFormatter={(value) => `₹${value}`}
                     />
                     <Tooltip
                       content={({ active, payload }) => {
@@ -176,7 +176,7 @@ export default function Dashboard() {
                                     Total
                                   </span>
                                   <span className="font-bold text-primary">
-                                    ${payload[0].value}
+                                    ₹{payload[0].value}
                                   </span>
                                 </div>
                               </div>
@@ -230,7 +230,7 @@ export default function Dashboard() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-primary">${expense.amount.toFixed(2)}</p>
+                          <p className="font-bold text-primary">₹{expense.amount.toFixed(2)}</p>
                         </div>
                       </div>
                     );
@@ -286,7 +286,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                ${expenses.length > 0 ? (totalSpending / expenses.length).toFixed(2) : '0.00'}
+                ₹{expenses.length > 0 ? (totalSpending / expenses.length).toFixed(2) : '0.00'}
               </div>
               <p className="text-xs text-muted-foreground">Per transaction</p>
             </CardContent>

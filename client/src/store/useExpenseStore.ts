@@ -58,7 +58,7 @@ const initializeData = () => {
         id: '1',
         name: 'Weekend Trip',
         type: 'Trip',
-        currency: '$',
+        currency: '₹',
         createdBy: user.id,
         members: [user],
       },

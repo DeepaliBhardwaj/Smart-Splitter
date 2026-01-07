@@ -106,7 +106,7 @@ export default function Analytics() {
                 <div className="p-4 rounded-lg bg-muted border">
                     <h4 className="font-semibold mb-1">Settlement Opportunity</h4>
                     <p className="text-sm text-muted-foreground">
-                        You owe Sarah $50 and she owes Mike $50. You can pay Mike directly to simplify the debt chain.
+                        You owe Sarah ₹50 and she owes Mike ₹50. You can pay Mike directly to simplify the debt chain.
                     </p>
                 </div>
             </div>

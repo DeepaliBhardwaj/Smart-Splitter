@@ -118,7 +118,7 @@ export default function GroupDetails() {
                                                     <div className="flex items-center gap-3">
                                                         <div className="text-right">
                                                             <div className="font-bold text-xl text-primary">
-                                                                ${expense.amount.toFixed(2)}
+                                                                ₹{expense.amount.toFixed(2)}
                                                             </div>
                                                             <p className="text-xs text-muted-foreground">
                                                                 {format(new Date(expense.date), 'MMM d, yyyy')}
@@ -179,12 +179,12 @@ export default function GroupDetails() {
                                                             <div>
                                                                 <span className="font-medium">{member.name}</span>
                                                                 <p className="text-xs text-muted-foreground">
-                                                                    Paid: ${paid.toFixed(2)} • Share: ${share.toFixed(2)}
+                                                                    Paid: ₹{paid.toFixed(2)} • Share: ₹{share.toFixed(2)}
                                                                 </p>
                                                             </div>
                                                         </div>
                                                         <span className={`font-bold text-lg ${net > 0 ? 'text-green-600' : net < 0 ? 'text-red-600' : 'text-muted-foreground'}`}>
-                                                            {Math.abs(net) < 0.01 ? 'Settled' : net > 0 ? `+$${net.toFixed(2)}` : `-$${Math.abs(net).toFixed(2)}`}
+                                                            {Math.abs(net) < 0.01 ? 'Settled' : net > 0 ? `+₹${net.toFixed(2)}` : `-₹${Math.abs(net).toFixed(2)}`}
                                                         </span>
                                                     </div>
                                                 );
@@ -228,10 +228,10 @@ export default function GroupDetails() {
                                     <TrendingUp className="h-5 w-5" /> Total Spending
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <div className="text-4xl font-bold mb-2">
-                                    ${groupExpenses.reduce((acc, curr) => acc + curr.amount, 0).toFixed(2)}
-                                </div>
+                        <CardContent>
+                            <div className="text-4xl font-bold mb-2">
+                                ₹{groupExpenses.reduce((acc, curr) => acc + curr.amount, 0).toFixed(2)}
+                            </div>
                                 <p className="text-primary-foreground/80 text-sm">
                                     Across {groupExpenses.length} {groupExpenses.length === 1 ? 'expense' : 'expenses'}
                                 </p>

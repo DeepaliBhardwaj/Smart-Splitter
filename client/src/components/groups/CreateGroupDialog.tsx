@@ -35,7 +35,7 @@ import { toast } from "sonner";
 const formSchema = z.object({
   name: z.string().min(2, "Group name must be at least 2 characters"),
   type: z.enum(["Trip", "Home", "Couple", "Other"]),
-  currency: z.string().default("$"),
+  currency: z.string().default("₹"),
 });
 
 interface CreateGroupDialogProps {
@@ -52,7 +52,7 @@ export function CreateGroupDialog({ children }: CreateGroupDialogProps) {
     defaultValues: {
       name: "",
       type: "Other",
-      currency: "$",
+      currency: "₹",
     },
   });
 
@@ -137,7 +137,7 @@ export function CreateGroupDialog({ children }: CreateGroupDialogProps) {
                 <FormItem>
                   <FormLabel>Currency</FormLabel>
                   <FormControl>
-                    <Input placeholder="$" {...field} />
+                    <Input placeholder="₹" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
